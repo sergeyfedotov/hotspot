@@ -45,7 +45,7 @@
        <number>0</number>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="startPage">
        <property name="sizePolicy">
@@ -147,7 +147,8 @@
                   <string>...</string>
                  </property>
                  <property name="icon">
-                  <iconset theme="configure"/>
+                  <iconset theme="configure">
+                   <normaloff>.</normaloff>.</iconset>
                  </property>
                  <property name="popupMode">
                   <enum>QToolButton::MenuButtonPopup</enum>
@@ -259,7 +260,7 @@
         <item>
          <widget class="QTabWidget" name="resultsTabWidget">
           <property name="currentIndex">
-           <number>4</number>
+           <number>1</number>
           </property>
           <property name="documentMode">
            <bool>true</bool>
@@ -288,8 +289,8 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>181</width>
-                 <height>386</height>
+                 <width>1119</width>
+                 <height>692</height>
                 </rect>
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -443,7 +444,7 @@
            <attribute name="title">
             <string>Bottom Up</string>
            </attribute>
-           <layout class="QVBoxLayout" name="bottomUpVerticalLayout">
+           <layout class="QVBoxLayout" name="verticalLayout_14">
             <property name="leftMargin">
              <number>0</number>
             </property>
@@ -457,23 +458,75 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="KFilterProxySearchLine" name="bottomUpSearch">
-              <property name="toolTip">
-               <string>Filter the call graph tree.</string>
+             <widget class="QSplitter" name="splitter_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
               </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTreeView" name="bottomUpTreeView">
-              <property name="alternatingRowColors">
-               <bool>true</bool>
-              </property>
-              <property name="uniformRowHeights">
-               <bool>true</bool>
-              </property>
-              <property name="sortingEnabled">
-               <bool>true</bool>
-              </property>
+              <widget class="QWidget" name="widget_3" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>4</verstretch>
+                </sizepolicy>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_13">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="KFilterProxySearchLine" name="bottomUpSearch">
+                  <property name="toolTip">
+                   <string>Filter the call graph tree.</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTreeView" name="bottomUpTreeView">
+                  <property name="alternatingRowColors">
+                   <bool>true</bool>
+                  </property>
+                  <property name="uniformRowHeights">
+                   <bool>true</bool>
+                  </property>
+                  <property name="sortingEnabled">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+              <widget class="QTreeView" name="bottomUpTimeLineView">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>1</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="rootIsDecorated">
+                <bool>false</bool>
+               </property>
+               <property name="uniformRowHeights">
+                <bool>true</bool>
+               </property>
+              </widget>
              </widget>
             </item>
            </layout>

@@ -1,9 +1,9 @@
 /*
-  util.h
+  timelinedelegate.h
 
   This file is part of Hotspot, the Qt GUI for performance analysis.
 
-  Copyright (C) 2016-2017 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
+  Copyright (C) 2017 Klarälvdalens Datakonsult AB, a KDAB Group company, info@kdab.com
   Author: Milian Wolff <milian.wolff@kdab.com>
 
   Licensees holding valid commercial KDAB Hotspot licenses may use this file in
@@ -27,29 +27,21 @@
 
 #pragma once
 
-#include <QtGlobal>
+#include <QStyledItemDelegate>
 
-class QString;
+#include "data.h"
 
-namespace Util {
+class TimeLineDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    explicit TimeLineDelegate(QObject* parent = nullptr);
+    virtual ~TimeLineDelegate();
 
-/**
- * Find a binary called @p name in this application's libexec directory.
- */
-QString findLibexecBinary(const QString& name);
+    void paint(QPainter* painter, const QStyleOptionViewItem& option,
+               const QModelIndex& index) const override;
 
-// HashCombine was taken from Qt's file qhashfunctions.h
-struct HashCombine {
-    typedef uint result_type;
-    template <typename T>
-    Q_DECL_CONSTEXPR result_type operator()(uint seed, const T &t) const Q_DECL_NOEXCEPT_EXPR(noexcept(qHash(t)))
-    // combiner taken from N3876 / boost::hash_combine
-    { return seed ^ (qHash(t) + 0x9e3779b9 + (seed << 6) + (seed >> 2)) ; }
+    bool helpEvent(QHelpEvent * event, QAbstractItemView * view,
+                   const QStyleOptionViewItem & option,
+                   const QModelIndex & index) override;
 };
-
-QString formatString(const QString& input);
-QString formatCost(quint32 cost);
-QString formatCostRelative(quint64 selfCost, quint64 totalCost);
-QString formatTime(quint64 nanoseconds);
-
-}

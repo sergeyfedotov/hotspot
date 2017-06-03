@@ -50,6 +50,7 @@
 
 #include "aboutdialog.h"
 #include "flamegraph.h"
+#include "util.h"
 
 #include "parsers/perf/perfparser.h"
 
@@ -59,27 +60,10 @@
 #include "models/treemodel.h"
 #include "models/topproxy.h"
 #include "models/callercalleemodel.h"
+#include "models/eventmodel.h"
+#include "models/timelinedelegate.h"
 
 namespace {
-QString formatTimeString(quint64 nanoseconds)
-{
-    quint64 totalSeconds = nanoseconds / 1000000000;
-    quint64 days = totalSeconds / 60 / 60 / 24;
-    quint64 hours = (totalSeconds / 60 / 60) % 24;
-    quint64 minutes = (totalSeconds / 60) % 60;
-    quint64 seconds = totalSeconds % 60;
-    quint64 milliseconds = (nanoseconds / 1000000) % 1000;
-
-    auto format = [] (quint64 fragment, int precision) -> QString {
-        return QString::number(fragment).rightJustified(precision, QLatin1Char('0'));
-    };
-    auto optional = [format] (quint64 fragment) -> QString {
-        return fragment > 0 ? format(fragment, 2) + QLatin1Char(':') : QString();
-    };
-    return optional(days) + optional(hours) + optional(minutes)
-            + format(seconds, 2) + QLatin1Char('.') + format(milliseconds, 3) + QLatin1Char('s');
-}
-
 void stretchFirstColumn(QTreeView* view)
 {
     view->header()->setStretchLastSection(false);
@@ -239,6 +223,16 @@ MainWindow::MainWindow(QWidget *parent) :
                 view->setCurrentIndex(view->model()->index(0, 0, {}));
             });
 
+    auto* eventModel = new EventModel(this);
+    ui->bottomUpTimeLineView->setModel(eventModel);
+    auto* timeLineDelegate = new TimeLineDelegate(this);
+    ui->bottomUpTimeLineView->setItemDelegateForColumn(EventModel::EventsColumn,
+                                                       timeLineDelegate);
+    connect(m_parser, &PerfParser::eventsAvailable,
+            this, [eventModel] (const Data::EventResults& data) {
+                eventModel->setData(data);
+            });
+
     connect(m_parser, &PerfParser::parsingFinished,
             this, [this] () {
                 ui->mainPageStack->setCurrentWidget(ui->resultsPage);
@@ -305,7 +299,7 @@ MainWindow::MainWindow(QWidget *parent) :
                     QTextStream stream(&summaryText);
                     stream << "<qt><table>"
                            << formatSummaryText(tr("Command"), data.command)
-                           << formatSummaryText(tr("Run Time"), formatTimeString(data.applicationRunningTime))
+                           << formatSummaryText(tr("Run Time"), Util::formatTime(data.applicationRunningTime))
                            << formatSummaryText(tr("Processes"), QString::number(data.processCount))
                            << formatSummaryText(tr("Threads"), QString::number(data.threadCount))
                            << formatSummaryText(tr("Total Samples"), QString::number(data.sampleCount));
