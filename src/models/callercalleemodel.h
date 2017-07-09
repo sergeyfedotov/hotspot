@@ -160,7 +160,8 @@ public:
         } else if (role == Qt::ToolTipRole) {
             QString toolTip = QObject::tr("%1 in %2")
                                 .arg(Util::formatString(symbol.symbol), Util::formatString(symbol.binary))
-                            + QLatin1Char('\n');
+                                .toHtmlEscaped()
+                            + QLatin1String("<br/>");
             Q_ASSERT(static_cast<quint32>(m_costs.numTypes()) == costs.size());
             for (int i = 0, c = m_costs.numTypes(); i < c; ++i) {
                 const auto cost = costs[i];
@@ -168,10 +169,10 @@ public:
                 toolTip += QObject::tr("%1: %2 out of %3 total (%4%)")
                             .arg(m_costs.typeName(i), Util::formatCost(cost), Util::formatCost(total),
                                 Util::formatCostRelative(cost, total))
-                        + QLatin1Char('\n');
+                            .toHtmlEscaped()
+                        + QLatin1String("<br/>");
             }
-            toolTip = QLatin1String("<qt/>") + toolTip.toHtmlEscaped();
-            return toolTip;
+            return QLatin1String("<qt/>") + toolTip;
         }
 
         return {};
@@ -285,7 +286,7 @@ public:
         } else if (role == LocationRole) {
             return QVariant::fromValue(location);
         } else if (role == Qt::ToolTipRole) {
-            QString toolTip = location + QLatin1Char('\n');
+            QString toolTip = location.toHtmlEscaped() + QLatin1String("<br/>");
             Q_ASSERT(static_cast<quint32>(m_costs.numTypes()) == costs.size());
             for (int i = 0, c = m_costs.numTypes(); i < c; ++i) {
                 const auto cost = costs[i];
@@ -293,9 +294,10 @@ public:
                 toolTip += QObject::tr("%1: %2 out of %3 total (%4%)")
                             .arg(m_costs.typeName(i), Util::formatCost(cost), Util::formatCost(total),
                                 Util::formatCostRelative(cost, total))
-                        + QLatin1Char('\n');
+                            .toHtmlEscaped()
+                        + QLatin1String("<br/>");
             }
-            return toolTip;
+            return QLatin1String("<qt/>") + toolTip;
         }
 
         return {};
