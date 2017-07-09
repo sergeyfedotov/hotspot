@@ -170,7 +170,7 @@ public:
                                 Util::formatCostRelative(cost, total))
                         + QLatin1Char('\n');
             }
-            return toolTip;
+            return "<qt/>" + toolTip.toHtmlEscaped();
         }
 
         return {};
