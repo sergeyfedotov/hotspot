@@ -158,7 +158,8 @@ public:
         } else if (role == SymbolRole) {
             return QVariant::fromValue(symbol);
         } else if (role == Qt::ToolTipRole) {
-            QString toolTip = QObject::tr("%1 in %2")
+            QString toolTip = QLatin1String("<qt/>") 
+                            + QObject::tr("%1 in %2")
                                 .arg(Util::formatString(symbol.symbol), Util::formatString(symbol.binary))
                                 .toHtmlEscaped()
                             + QLatin1String("<br/>");
@@ -172,7 +173,7 @@ public:
                             .toHtmlEscaped()
                         + QLatin1String("<br/>");
             }
-            return QLatin1String("<qt/>") + toolTip;
+            return toolTip;
         }
 
         return {};
@@ -286,7 +287,7 @@ public:
         } else if (role == LocationRole) {
             return QVariant::fromValue(location);
         } else if (role == Qt::ToolTipRole) {
-            QString toolTip = location.toHtmlEscaped() + QLatin1String("<br/>");
+            QString toolTip = QLatin1String("<qt/>") + location.toHtmlEscaped() + QLatin1String("<br/>");
             Q_ASSERT(static_cast<quint32>(m_costs.numTypes()) == costs.size());
             for (int i = 0, c = m_costs.numTypes(); i < c; ++i) {
                 const auto cost = costs[i];
@@ -297,7 +298,7 @@ public:
                             .toHtmlEscaped()
                         + QLatin1String("<br/>");
             }
-            return QLatin1String("<qt/>") + toolTip;
+            return toolTip;
         }
 
         return {};
